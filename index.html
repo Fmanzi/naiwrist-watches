@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naiwrist Watches - Premium Timepieces</title>
+
+  <link rel="shortcut icon" href="./assets/images/logo/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div class="overlay" data-overlay></div>
+
+  <!-- MODAL -->
+  <div class="modal" data-modal>
+    <div class="modal-close-overlay" data-modal-overlay></div>
+    <div class="modal-content">
+      <button class="modal-close-btn" data-modal-close>
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <div class="newsletter-img">
+        <img src="./assets/images/products/Poedagar Gents Chronograph watch/rn-image_picker_lib_temp_26ff2949-2f2c-4223-835a-f70affa7725b.webp" alt="Poedagar Gents Chronograph Watch" width="400" height="400">
+      </div>
+      <div class="newsletter">
+        <div class="newsletter-header">
+          <h3 class="newsletter-title">Visit Our Shop</h3>
+          <p class="newsletter-desc" data-modal-address>
+            Located at <b>Nairobi, Kenya</b>
+          </p>
+        </div>
+        <div class="contact-info">
+          <p class="contact-line" data-modal-phone>
+            <ion-icon name="call-outline"></ion-icon> (+254) 712 345 678
+          </p>
+          <p class="contact-line" data-modal-email>
+            <ion-icon name="mail-outline"></ion-icon> shopexpress@gmail.com
+          </p>
+        </div>
+        <div class="social-row" data-modal-social>
+          <a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a>
+          <a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a>
+          <a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a>
+          <a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION TOAST -->
+  <div class="notification-toast" data-toast>
+    <button class="toast-close-btn" data-toast-close>
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+    <div class="toast-banner">
+      <img src="" alt="Product" width="80" height="70" data-toast-img>
+    </div>
+    <div class="toast-detail">
+      <p class="toast-message">Someone just bought</p>
+      <p class="toast-title" data-toast-title></p>
+      <p class="toast-meta"><time datetime="PT2M">2 Minutes</time> ago</p>
+    </div>
+  </div>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-sidebar" data-cart-sidebar>
+    <div class="cart-sidebar-top">
+      <h2 class="cart-sidebar-title">Shopping Cart</h2>
+      <button class="cart-sidebar-close" data-cart-close>
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+    <div class="cart-sidebar-body" data-cart-body>
+      <div class="cart-empty">
+        <ion-icon name="cart-outline"></ion-icon>
+        <p>Your cart is empty</p>
+      </div>
+    </div>
+    <div class="cart-sidebar-bottom">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span class="cart-total-price" data-cart-total></span>
+      </div>
+      <button class="btn-checkout" data-checkout-btn>Checkout</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="checkout-modal" data-checkout-modal>
+    <div class="checkout-modal-content">
+      <button class="checkout-close-btn" data-checkout-close>
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <h2 class="checkout-title">Order Details</h2>
+      <form id="checkoutForm" data-checkout-form>
+        <div class="checkout-summary" data-checkout-summary></div>
+        <div class="checkout-fields">
+          <div class="input-group">
+            <label for="checkoutName">Full Name</label>
+            <input type="text" id="checkoutName" name="name" placeholder="John Doe" required>
+          </div>
+          <div class="input-group">
+            <label for="checkoutPhone">Phone Number</label>
+            <input type="tel" id="checkoutPhone" name="phone" placeholder="+254 712 345 678" required>
+          </div>
+          <div class="input-group">
+            <label for="checkoutAddress">Delivery Address</label>
+            <textarea id="checkoutAddress" name="address" placeholder="Street, City, Kenya" required></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-place-order">
+          <ion-icon name="checkmark-circle-outline"></ion-icon> Place Order via website
+        </button>
+        <button type="button" class="btn-place-order-email" data-whatsapp-order>
+          <ion-icon name="logo-whatsapp"></ion-icon> Order via WhatsApp
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- QUICK VIEW MODAL -->
+  <div class="quickview-modal" data-quickview-modal></div>
+
+  <!-- HEADER -->
+  <header>
+
+    <div class="header-main">
+
+      <div class="container">
+
+        <a href="#" class="header-logo">
+          <span class="logo-text">Naiwrist Watches</span>
+        </a>
+
+        <div class="header-alert-news">
+          <p>Magic Business Center, 1st Floor, Shop M18, Nairobi CBD</p>
+        </div>
+
+        <ul class="header-social-container">
+          <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+        </ul>
+
+        <div class="header-user-actions">
+          <button class="action-btn">
+            <ion-icon name="person-outline"></ion-icon>
+          </button>
+          <button class="action-btn" data-cart-open>
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <nav class="desktop-navigation-menu">
+      <div class="container">
+        <ul class="desktop-menu-category-list">
+          <li class="menu-category"><a href="#" class="menu-title">Home</a></li>
+          <li class="menu-category">
+            <a href="#" class="menu-title">Categories</a>
+            <div class="dropdown-panel">
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Curren</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Curren">Dress Watches</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Curren">Sporty</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Curren">Business</a></li>
+                <li class="panel-list-item"><a href="#"><img src="./assets/images/products/A Curren 8455 Gent's watch/rn-image_picker_lib_temp_01b428e0-3f2b-460d-b232-530757c699cc.webp" alt="Curren" width="250" height="119"></a></li>
+              </ul>
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Forsining</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Forsining">Automatic</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Forsining">Skeleton Dial</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Forsining">Leather Strap</a></li>
+                <li class="panel-list-item"><a href="#"><img src="./assets/images/products/Forsining Automatic - watch/IMG-20240828-WA0213.webp" alt="Forsining" width="250" height="119"></a></li>
+              </ul>
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Poedagar</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Poedagar">Chronograph</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Poedagar">Dual Time</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="Poedagar">Classic</a></li>
+                <li class="panel-list-item"><a href="#"><img src="./assets/images/products/Poedagar 984 Chronograph watch/rn-image_picker_lib_temp_ec387dd2-7934-4661-bb1e-50d74af39ba9.webp" alt="Poedagar" width="250" height="119"></a></li>
+              </ul>
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">All Watches</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="All">New Arrivals</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="All">Best Sellers</a></li>
+                <li class="panel-list-item"><a href="#" data-cat="All">On Sale</a></li>
+                <li class="panel-list-item"><a href="#"><img src="./assets/images/products/Poedagar Gent's watch AP design/rn-image_picker_lib_temp_ea2a2610-96f2-4640-8581-4adf4900142c.webp" alt="All Watches" width="250" height="119"></a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="menu-category"><a href="#" class="menu-title" data-cat="Curren">Curren</a></li>
+          <li class="menu-category"><a href="#" class="menu-title" data-cat="Forsining">Forsining</a></li>
+          <li class="menu-category"><a href="#" class="menu-title" data-cat="Poedagar">Poedagar</a></li>
+          <li class="menu-category"><a href="#" class="menu-title">New Arrivals</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="mobile-bottom-navigation">
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="menu-outline"></ion-icon>
+      </button>
+      <button class="action-btn" data-cart-open>
+        <ion-icon name="bag-handle-outline"></ion-icon>
+        <span class="count">0</span>
+      </button>
+      <button class="action-btn" data-home>
+        <ion-icon name="home-outline"></ion-icon>
+      </button>
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="grid-outline"></ion-icon>
+      </button>
+    </div>
+
+    <nav class="mobile-navigation-menu has-scrollbar" data-mobile-menu>
+      <div class="menu-top">
+        <h2 class="menu-title">Menu</h2>
+        <button class="menu-close-btn" data-mobile-menu-close-btn>
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+      <ul class="mobile-menu-category-list">
+        <!-- Populated by script.js -->
+      </ul>
+      <div class="menu-bottom">
+        <ul class="menu-category-list">
+          <li class="menu-category">
+            <p class="menu-title" style="padding: 14px 20px; font-size: var(--fs-7); font-weight: var(--weight-600); color: var(--sonic-silver);">English</p>
+          </li>
+        </ul>
+        <ul class="menu-social-container">
+          <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+        </ul>
+      </div>
+    </nav>
+
+  </header>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- BANNER -->
+    <div class="banner">
+      <div class="container">
+        <div class="slider-container has-scrollbar">
+          <!-- Populated by script.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT -->
+    <div class="product-container">
+      <div class="container">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar has-scrollbar" data-mobile-menu>
+          <div class="sidebar-category">
+            <div class="sidebar-top">
+              <h2 class="sidebar-title">Category</h2>
+              <button class="sidebar-close-btn" data-mobile-menu-close-btn>
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
+            <ul class="sidebar-menu-category-list">
+              <!-- Populated by script.js -->
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-box">
+          <div class="product-main">
+            <div class="header-search-container product-search-container">
+              <div class="search-wrapper">
+                <input type="search" name="search" class="search-field" placeholder="Search watches by name or brand...">
+                <button class="search-btn">
+                  <ion-icon name="search-outline"></ion-icon>
+                </button>
+              </div>
+              <div class="view-toggle">
+                <button class="view-toggle-btn active" data-view="grid" title="Grid View">
+                  <ion-icon name="grid-outline"></ion-icon>
+                </button>
+                <button class="view-toggle-btn" data-view="list" title="List View">
+                  <ion-icon name="list-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+            <div class="product-grid">
+              <!-- Products rendered dynamically by script.js -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="copyright">
+          Copyright &copy; <a href="#">Naiwrist Watches</a> all rights reserved.
+        </p>
+      </div>
+    </div>
+
+  </footer>
+
+  <script src="./assets/js/script.js"></script>
+  <script src="./assets/js/checkout.js"></script>
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>

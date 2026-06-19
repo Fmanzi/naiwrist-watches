@@ -1,0 +1,48 @@
+{
+  "storeName": "Naiwrist Watches",
+  "storeTagline": "Premium Timepieces for both Men and Women",
+  "currency": "Ksh",
+  "currencyCode": "KES",
+  "whatsappNumber": "0728580415",
+  "whatsappPrefix": "254",
+  "whatsappMessage": "Hi! I'd like to place an order:",
+  "shippingPromo": "Free Delivery This Week Orders Over Ksh 5,000",
+  "email": "naiwristwatches@gmail.com",
+  "phone": "(+254) 712 345 678",
+  "address": "Magic Business Center, 1st Floor, Shop M18, Nairobi CBD",
+  "social": {
+    "facebook": "#",
+    "twitter": "#",
+    "instagram": "#",
+    "linkedin": "#"
+  },
+  "banners": [
+    {
+      "image": "./assets/images/products/A Curren 8455 Gent's watch/rn-image_picker_lib_temp_01b428e0-3f2b-460d-b232-530757c699cc.webp",
+      "subtitle": "Latest Collection",
+      "title": "Premium Curren Watches",
+      "text": "starting from Ksh 3,500",
+      "btnText": "Shop now"
+    },
+    {
+      "image": "./assets/images/products/Forsining Automatic - watch/IMG-20240828-WA0213.webp",
+      "subtitle": "Automatic Movement",
+      "title": "Forsining Timepieces",
+      "text": "starting from Ksh 6,499",
+      "btnText": "Shop now"
+    },
+    {
+      "image": "./assets/images/products/Poedagar 984 Chronograph watch/rn-image_picker_lib_temp_ec387dd2-7934-4661-bb1e-50d74af39ba9.webp",
+      "subtitle": "Chronograph Collection",
+      "title": "Poedagar Luxury",
+      "text": "starting from Ksh 3,800",
+      "btnText": "Shop now"
+    }
+  ],
+  "categories": [
+    { "name": "All", "icon": "" },
+    { "name": "Curren", "icon": "" },
+    { "name": "Forsining", "icon": "" },
+    { "name": "Poedagar", "icon": "" }
+  ]
+}

@@ -220,9 +220,9 @@ document.getElementById('uploadBtn').addEventListener('click', function() {
 function renderImagePreviews() {
   var container = document.getElementById('imagePreview');
   container.innerHTML = currentImages.map(function(url, i) {
-    return '<div style="position:relative;display:inline-block;">' +
-      '<img src="' + url + '" style="width:72px;height:72px;object-fit:cover;border-radius:4px;border:1px solid #eee;">' +
-      '<button type="button" onclick="removeImage(' + i + ')" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:none;background:#d32f2f;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>' +
+    return '<div class="img-wrap">' +
+      '<img src="' + url + '" alt="Product image ' + (i + 1) + '">' +
+      '<button class="remove-img" onclick="removeImage(' + i + ')" title="Remove image">&times;</button>' +
     '</div>';
   }).join('');
 }

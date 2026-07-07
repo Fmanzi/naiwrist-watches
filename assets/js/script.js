@@ -11,7 +11,7 @@ let state = {
   carouselTimer: null
 };
 
-const CONFIG_DATA = {
+var DEFAULT_CONFIG = {
   storeName: 'Naiwrist Watches',
   storeTagline: 'Premium Timepieces for both Men and Women',
   currency: 'Ksh',
@@ -24,11 +24,7 @@ const CONFIG_DATA = {
   phone: '(+254) 712 345 678',
   address: 'Magic Business Center, 1st Floor, Shop M18, Nairobi CBD',
   social: { facebook: '#', twitter: '#', instagram: '#', linkedin: '#' },
-  banners: [
-    { image: "./assets/images/products/A Curren 8455 Gent's watch/rn-image_picker_lib_temp_01b428e0-3f2b-460d-b232-530757c699cc.webp", subtitle: 'Latest Collection', title: 'Premium Curren Watches', text: 'starting from Ksh 3,500', btnText: 'Shop now' },
-    { image: './assets/images/products/Forsining Automatic - watch/IMG-20240828-WA0213.webp', subtitle: 'Automatic Movement', title: 'Forsining Timepieces', text: 'starting from Ksh 6,499', btnText: 'Shop now' },
-    { image: './assets/images/products/Poedagar 984 Chronograph watch/rn-image_picker_lib_temp_ec387dd2-7934-4661-bb1e-50d74af39ba9.webp', subtitle: 'Chronograph Collection', title: 'Poedagar Luxury', text: 'starting from Ksh 3,800', btnText: 'Shop now' }
-  ],
+  banners: [],
   categories: [
     { name: 'All', icon: '' },
     { name: 'Curren', icon: '' },
@@ -37,22 +33,7 @@ const CONFIG_DATA = {
   ]
 };
 
-const PRODUCTS_DATA = [
-  { id: 1, name: "A Curren 8455 Gent's watch", category: 'Curren', price: 3500.00, comparePrice: 4500.00, images: ['./assets/images/products/A Curren 8455 Gent\'s watch/rn-image_picker_lib_temp_01b428e0-3f2b-460d-b232-530757c699cc.webp', './assets/images/products/A Curren 8455 Gent\'s watch/rn-image_picker_lib_temp_1a8e9be8-c63f-482d-b810-2dedf2041384.webp', './assets/images/products/A Curren 8455 Gent\'s watch/rn-image_picker_lib_temp_3db28ce5-9086-4612-8b72-3f9dd4db244c.webp', './assets/images/products/A Curren 8455 Gent\'s watch/rn-image_picker_lib_temp_68c69f6d-5e10-4efb-99d3-f1fa14e80dfc.webp'], description: 'Stainless steel construction with sleek design. Water-resistant, battery powered. Perfect for any occasion.' },
-  { id: 2, name: 'CURREN Gents 8444 Ultra Slim Watch', category: 'Curren', price: 3500.00, comparePrice: 4000.00, images: ['./assets/images/products/CURREN Gents 8444 Ultra Slim Watch/rn-image_picker_lib_temp_26f8b2fa-7337-41cc-b5a9-dd874a201bd4.webp', './assets/images/products/CURREN Gents 8444 Ultra Slim Watch/rn-image_picker_lib_temp_85481717-8ced-4a17-a1f8-b2927e3b9baf.webp', './assets/images/products/CURREN Gents 8444 Ultra Slim Watch/rn-image_picker_lib_temp_cfb7d3fb-bdc2-4163-ab01-e59cb6eafdf1.webp', './assets/images/products/CURREN Gents 8444 Ultra Slim Watch/rn-image_picker_lib_temp_da5d679a-2a5d-4a4e-b061-862cf7db240f.webp'], description: 'Ultra-slim profile with high-quality stainless steel case. Quartz movement, water-resistant, fully boxed. Ideal gift option.' },
-  { id: 3, name: 'Forsining Automatic - watch', category: 'Forsining', price: 7000.00, comparePrice: 7400.00, images: ['./assets/images/products/Forsining Automatic - watch/IMG-20240828-WA0213.webp', './assets/images/products/Forsining Automatic - watch/IMG-20240828-WA0213_888a7e84-621c-4c52-9e0d-4a485dc9b169.webp'], description: 'Golden-toned automatic movement watch with luminous arms. Stainless steel construction, water-resistant. Elegant and reliable.' },
-  { id: 4, name: 'Forsining automatic Gents watch', category: 'Forsining', price: 6499.00, comparePrice: 6900.00, images: ['./assets/images/products/Forsining automatic Gents watch/rn-image_picker_lib_temp_0aa37922-d741-47ab-8260-6d9c6d351682.webp', './assets/images/products/Forsining automatic Gents watch/rn-image_picker_lib_temp_21cdd01f-ffda-4103-85d7-64d9d6b46562.webp', './assets/images/products/Forsining automatic Gents watch/rn-image_picker_lib_temp_37a15047-3fe2-4be2-8a2b-bf3d8231708a.webp', './assets/images/products/Forsining automatic Gents watch/rn-image_picker_lib_temp_68ca60bf-69a5-44e7-9619-539f06dac7ad.jpg'], description: 'Skeletonized dial showcasing automatic movement. Genuine leather strap, stainless steel case. Classic and elegant design.' },
-  { id: 5, name: 'Forsining automatic watch', category: 'Forsining', price: 7000.00, comparePrice: 7500.00, images: ['./assets/images/products/Forsining automatic watch/2CF2B2D2-FF04-449E-A313-CFB66577D6E8.webp', './assets/images/products/Forsining automatic watch/3613F2AD-487F-490B-BBC7-44A397E97E42.webp', './assets/images/products/Forsining automatic watch/49594E59-0353-4559-8D33-C4AE5498C6C2.webp', './assets/images/products/Forsining automatic watch/C7748F9B-6B17-4DE8-A759-5CC92332EA5E.webp'], description: 'Automatic movement with luminous arms. Stainless steel and leather strap. Water-resistant, presented in Forsining branded box.' },
-  { id: 6, name: 'GENTS CURREN 8514 LUXURIOUS BUSINESS WATCH', category: 'Curren', price: 4850.00, comparePrice: 5500.00, images: ['./assets/images/products/GENTS CURREN 8514 LUXURIOUS BUSINESS WATCH/IMG-20231120-WA0699.webp', './assets/images/products/GENTS CURREN 8514 LUXURIOUS BUSINESS WATCH/IMG-20231120-WA0701.webp', './assets/images/products/GENTS CURREN 8514 LUXURIOUS BUSINESS WATCH/IMG-20231120-WA0702.webp', './assets/images/products/GENTS CURREN 8514 LUXURIOUS BUSINESS WATCH/IMG-20231120-WA0703.webp'], description: 'Chronograph movement with date display and luminous elements. Water-resistant. Available in black and blue color options.' },
-  { id: 7, name: 'Gents Poedagar 910 watch', category: 'Poedagar', price: 3800.00, comparePrice: 4800.00, images: ['./assets/images/products/Gents Poedagar 910 watch/IMG-20240430-WA0082.webp', './assets/images/products/Gents Poedagar 910 watch/rn-image_picker_lib_temp_5c3bd414-d0e5-45af-b090-23f5e7fad6e3.webp', './assets/images/products/Gents Poedagar 910 watch/rn-image_picker_lib_temp_a01f7b79-39b9-4dc0-80a0-4c61c2b17f56.webp'], description: 'Reliable timepiece with date display. Strong luminous feature for low-light readability. Water-resistant with sleek metallic strap.' },
-  { id: 8, name: 'POEDAGAR 615 CLASSIC WATCH', category: 'Poedagar', price: 4300.00, comparePrice: 4800.00, images: ['./assets/images/products/POEDAGAR 615 CLASSIC WATCH/B8C09991-CCC3-48B4-8F74-4E60A70A7415.webp', './assets/images/products/POEDAGAR 615 CLASSIC WATCH/BC5C9C67-9BF6-42AA-9384-54407D97F877.webp', './assets/images/products/POEDAGAR 615 CLASSIC WATCH/rn-image_picker_lib_temp_15238799-a464-4e50-b201-b6cddd20cc46.webp', './assets/images/products/POEDAGAR 615 CLASSIC WATCH/rn-image_picker_lib_temp_70e78aa8-0a86-4d11-ab09-2deac0cabd82.webp'], description: 'Timeless design with stainless steel case and quartz movement. Luminous hands, water-resistant. Perfect for casual or business attire.' },
-  { id: 9, name: 'Poedagar 853 Analogue Quartz Watch Men', category: 'Poedagar', price: 3999.00, comparePrice: 4500.00, images: ['./assets/images/products/Poedagar 853 Analogue Quartz Watch Men/rn-image_picker_lib_temp_38b53b43-bc28-4789-b315-435a613ed749.webp', './assets/images/products/Poedagar 853 Analogue Quartz Watch Men/rn-image_picker_lib_temp_66b07f9c-93b3-498f-8b58-6dd17a226fae.webp', './assets/images/products/Poedagar 853 Analogue Quartz Watch Men/rn-image_picker_lib_temp_aee9efb4-1c02-481c-9973-c96c5baddaae.webp'], description: 'Sophisticated square alloy case with stainless steel bracelet. Quartz movement, luminous hands, 3ATM water-resistant. Modern luxury.' },
-  { id: 10, name: 'Poedagar 921 Chronograph Business watch', category: 'Poedagar', price: 5200.00, comparePrice: 6500.00, images: ['./assets/images/products/Poedagar 921 Chronograph Business watch/rn-image_picker_lib_temp_38c2fa8a-6236-4889-a6ae-9d795810f349.webp', './assets/images/products/Poedagar 921 Chronograph Business watch/rn-image_picker_lib_temp_6a526874-a508-4971-a486-b7209c4ca8b1.webp', './assets/images/products/Poedagar 921 Chronograph Business watch/rn-image_picker_lib_temp_9eb51941-938d-4811-bcf6-d0f9492959ce.webp', './assets/images/products/Poedagar 921 Chronograph Business watch/rn-image_picker_lib_temp_e1fd8ce7-4aeb-4179-9b8b-c97c7be43763.webp'], description: 'Sophisticated chronograph with precise functionality. Water-resistant, date display. Battery-powered for long-lasting performance.' },
-  { id: 11, name: 'Poedagar 984 Chronograph watch', category: 'Poedagar', price: 4999.00, comparePrice: 5500.00, images: ['./assets/images/products/Poedagar 984 Chronograph watch/rn-image_picker_lib_temp_2e408659-bb76-44de-84ce-ed30c0d89144.webp', './assets/images/products/Poedagar 984 Chronograph watch/rn-image_picker_lib_temp_3b9cef4a-db8b-43f3-9ca2-715d2ffae942.webp', './assets/images/products/Poedagar 984 Chronograph watch/rn-image_picker_lib_temp_75b324bc-61c5-4758-bb46-6961ed224e7d.webp', './assets/images/products/Poedagar 984 Chronograph watch/rn-image_picker_lib_temp_8df013f3-2913-4b06-8c68-e9d0cbe3786a.webp'], description: 'Skeleton dial with chronograph function. Stainless steel construction, water-resistant. Unique modern aesthetic with reliable performance.' },
-  { id: 12, name: 'Poedagar E108 Dual time watch', category: 'Poedagar', price: 4500.00, comparePrice: 5500.00, images: ['./assets/images/products/Poedagar E108 Dual time watch/rn-image_picker_lib_temp_816a1161-7960-4a96-9de7-bdced3d14e2f.webp', './assets/images/products/Poedagar E108 Dual time watch/rn-image_picker_lib_temp_976c6a71-f160-4142-9d87-e0872a65e9fe.webp', './assets/images/products/Poedagar E108 Dual time watch/rn-image_picker_lib_temp_aa6b2023-8700-4cb9-bb71-b903e48167a4.webp', './assets/images/products/Poedagar E108 Dual time watch/rn-image_picker_lib_temp_bc97076b-3548-4e82-a315-7d5e57e3a065.webp'], description: 'Dual time zone functionality with solid stainless-steel finish. Clear dial layout, dependable battery movement. Sharp and reliable.' },
-  { id: 13, name: 'Poedagar Gents Chronograph watch', category: 'Poedagar', price: 4999.00, comparePrice: 6000.00, images: ['./assets/images/products/Poedagar Gents Chronograph watch/rn-image_picker_lib_temp_26ff2949-2f2c-4223-835a-f70affa7725b.webp', './assets/images/products/Poedagar Gents Chronograph watch/rn-image_picker_lib_temp_324ce141-f833-4f8d-9742-8deff13c6edc.webp', './assets/images/products/Poedagar Gents Chronograph watch/rn-image_picker_lib_temp_67f71c74-8c08-4eb5-8f26-cb0d9ece641d.webp', './assets/images/products/Poedagar Gents Chronograph watch/rn-image_picker_lib_temp_c9e08f4d-23a7-470c-b65b-43845d78ea0e.webp'], description: 'Chronograph movement with date display. Water-resistant, strong luminous. Genuine leather suede straps for comfort and style.' },
-  { id: 14, name: "Poedagar Gent's watch AP design", category: 'Poedagar', price: 4200.00, comparePrice: 5000.00, images: ['./assets/images/products/Poedagar Gent\'s watch AP design/rn-image_picker_lib_temp_79b928f4-0edb-4859-ac31-1a00177a7975.webp', './assets/images/products/Poedagar Gent\'s watch AP design/rn-image_picker_lib_temp_86c94db7-404c-4071-9be4-fef5e2cbda89.webp', './assets/images/products/Poedagar Gent\'s watch AP design/rn-image_picker_lib_temp_b3293932-6afb-4951-a69b-e27aca5cdd01.webp', './assets/images/products/Poedagar Gent\'s watch AP design/rn-image_picker_lib_temp_c312cd5f-96ce-4853-b300-5ddbf1dd2deb.webp'], description: 'AP-inspired octagonal bezel design with date display. Water-resistant, stainless steel. Quartz movement, premium look at an affordable price.' }
-];
+
 
 const modal = document.querySelector('[data-modal]');
 const modalCloseBtn = document.querySelector('[data-modal-close]');
@@ -107,13 +88,31 @@ for (let i = 0; i < accordionBtn.length; i++) {
 }
 
 async function loadConfig() {
-  state.config = CONFIG_DATA;
-  return CONFIG_DATA;
+  try {
+    var docSnap = await db.collection('config').doc('store').get();
+    if (docSnap.exists) {
+      state.config = docSnap.data();
+    } else {
+      state.config = DEFAULT_CONFIG;
+    }
+  } catch (e) {
+    console.warn('Firestore unavailable, using defaults:', e);
+    state.config = DEFAULT_CONFIG;
+  }
+  localStorage.setItem('shopConfig', JSON.stringify(state.config));
+  return state.config;
 }
 
 async function loadProducts() {
-  state.products = PRODUCTS_DATA;
-  return PRODUCTS_DATA;
+  try {
+    var snapshot = await db.collection('products').get();
+    state.products = snapshot.docs.map(function(d) { return d.data(); });
+  } catch (e) {
+    console.warn('Firestore unavailable, no products loaded:', e);
+    state.products = [];
+  }
+  window.__products = state.products;
+  return state.products;
 }
 
 function formatPrice(amount) {
@@ -176,7 +175,10 @@ function renderProducts() {
 }
 
 function renderCategories() {
-  const cats = state.config.categories || [{ name: 'All', icon: '' }];
+  const catsRaw = state.config.categories || [{ name: 'All', icon: '' }];
+  const cats = Array.isArray(catsRaw) && typeof catsRaw[0] === 'string'
+    ? catsRaw.map(function(name) { return { name: name, icon: '' }; })
+    : catsRaw;
   const sidebar = document.querySelector('.sidebar-menu-category-list');
   if (!sidebar) return;
 

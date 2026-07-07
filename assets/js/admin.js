@@ -436,17 +436,50 @@ function parseCSVLine(line) {
 }
 
 function showPreview() {
+  var updateMode = document.getElementById('updateMode').checked;
   document.getElementById('previewCount').textContent = parsedProducts.length;
-  var list = document.getElementById('previewList');
-  list.innerHTML = parsedProducts.map(function(p, i) {
-    return '<div style="padding:4px 0;border-bottom:1px solid #eee;">' +
-      '<strong>#' + (i + 1) + '</strong> ' + escapeHtml(p.name) +
-      ' — <em>' + escapeHtml(p.category) + '</em> — Ksh ' + (p.price || 0).toLocaleString() +
-      (p.images.length ? ' — <span style="color:#2e7d32;">' + p.images.length + ' images</span>' : '') +
-    '</div>';
-  }).join('');
-  document.getElementById('importPreview').style.display = 'block';
-  document.getElementById('bulkImportBtnAction').disabled = false;
+
+  if (updateMode) {
+    db.collection('products').get().then(function(snapshot) {
+      var nameMap = {};
+      snapshot.docs.forEach(function(d) {
+        var data = d.data();
+        if (data.name) nameMap[data.name.toLowerCase().trim()] = d.id;
+      });
+
+      var updated = 0, created = 0;
+      var list = document.getElementById('previewList');
+      list.innerHTML = parsedProducts.map(function(p, i) {
+        var key = p.name.toLowerCase().trim();
+        var exists = nameMap[key] ? true : false;
+        if (exists) updated++; else created++;
+        return '<div style="padding:4px 0;border-bottom:1px solid #eee;">' +
+          '<strong>#' + (i + 1) + '</strong> ' + escapeHtml(p.name) +
+          ' — <em>' + escapeHtml(p.category) + '</em> — Ksh ' + (p.price || 0).toLocaleString() +
+          (p.images.length ? ' — <span style="color:#2e7d32;">' + p.images.length + ' images</span>' : '') +
+          ' — <span style="font-size:11px;font-weight:500;color:' + (exists ? '#e65100' : '#2e7d32') + ';">' + (exists ? 'WILL UPDATE' : 'NEW') + '</span>' +
+        '</div>';
+      }).join('');
+
+      document.getElementById('updatePreviewText').textContent =
+        ' (' + updated + ' will update, ' + created + ' will be created)';
+      document.getElementById('importPreview').style.display = 'block';
+      document.getElementById('bulkImportBtnAction').disabled = false;
+    });
+  } else {
+    document.getElementById('updatePreviewText').textContent = ' (all will be created as new)';
+    var list = document.getElementById('previewList');
+    list.innerHTML = parsedProducts.map(function(p, i) {
+      return '<div style="padding:4px 0;border-bottom:1px solid #eee;">' +
+        '<strong>#' + (i + 1) + '</strong> ' + escapeHtml(p.name) +
+        ' — <em>' + escapeHtml(p.category) + '</em> — Ksh ' + (p.price || 0).toLocaleString() +
+        (p.images.length ? ' — <span style="color:#2e7d32;">' + p.images.length + ' images</span>' : '') +
+        ' — <span style="font-size:11px;font-weight:500;color:#2e7d32;">NEW</span>' +
+      '</div>';
+    }).join('');
+    document.getElementById('importPreview').style.display = 'block';
+    document.getElementById('bulkImportBtnAction').disabled = false;
+  }
 }
 
 document.getElementById('bulkCancelBtn').addEventListener('click', function() {
@@ -456,59 +489,89 @@ document.getElementById('bulkCancelBtn').addEventListener('click', function() {
 
 document.getElementById('bulkImportBtnAction').addEventListener('click', function() {
   if (!parsedProducts.length) { alert('No products to import.'); return; }
-  if (!confirm('Import ' + parsedProducts.length + ' products into Firestore?')) return;
 
-  var btn = document.getElementById('bulkImportBtnAction');
-  btn.disabled = true;
-  btn.textContent = 'Importing...';
-  document.getElementById('importProgress').style.display = 'block';
+  var updateMode = document.getElementById('updateMode').checked;
 
-  var total = parsedProducts.length;
-  var imported = 0;
-  var bar = document.getElementById('importProgressBar');
-  var text = document.getElementById('importProgressText');
-  var errors = [];
+  function runImport(nameMap) {
+    var createdCount = 0, updatedCount = 0;
+    var total = parsedProducts.length;
+    var btn = document.getElementById('bulkImportBtnAction');
+    btn.disabled = true;
+    btn.textContent = 'Importing...';
+    document.getElementById('importProgress').style.display = 'block';
 
-  function importBatch(start) {
-    var batchSize = 20;
-    var slice = parsedProducts.slice(start, start + batchSize);
-    if (!slice.length) {
-      btn.textContent = 'Import Products';
-      btn.disabled = false;
-      var msg = 'Successfully imported ' + imported + ' of ' + total + ' products.';
-      if (errors.length) msg += ' Errors: ' + errors.join('; ');
-      alert(msg);
-      document.getElementById('bulkImportModal').classList.remove('active');
-      parsedProducts = [];
-      return;
+    var imported = 0;
+    var bar = document.getElementById('importProgressBar');
+    var text = document.getElementById('importProgressText');
+    var errors = [];
+
+    function importBatch(start) {
+      var batchSize = 20;
+      var slice = parsedProducts.slice(start, start + batchSize);
+      if (!slice.length) {
+        btn.textContent = 'Import Products';
+        btn.disabled = false;
+        var msg = 'Done! Created: ' + createdCount + ', Updated: ' + updatedCount + ' of ' + total + '.';
+        if (errors.length) msg += ' Errors: ' + errors.join('; ');
+        alert(msg);
+        document.getElementById('bulkImportModal').classList.remove('active');
+        parsedProducts = [];
+        return;
+      }
+
+      var batch = db.batch();
+      var now = firebase.firestore.FieldValue.serverTimestamp();
+
+      slice.forEach(function(p) {
+        var matchKey = p.name.toLowerCase().trim();
+        var existingId = nameMap ? nameMap[matchKey] : null;
+        var ref = existingId ? db.collection('products').doc(existingId) : db.collection('products').doc();
+
+        var data = {
+          name: p.name,
+          category: p.category,
+          price: p.price,
+          comparePrice: p.comparePrice || 0,
+          description: p.description || '',
+          images: p.images || [],
+          updatedAt: now
+        };
+
+        if (existingId) {
+          batch.set(ref, data, { merge: true });
+          updatedCount++;
+        } else {
+          data.createdAt = now;
+          batch.set(ref, data);
+          createdCount++;
+        }
+      });
+
+      batch.commit().then(function() {
+        imported += slice.length;
+        bar.value = (imported / total) * 100;
+        text.textContent = imported + ' / ' + total + ' products processed...';
+        importBatch(start + batchSize);
+      }).catch(function(err) {
+        errors.push('Batch ' + (start / batchSize + 1) + ': ' + err.message);
+        imported += slice.length;
+        importBatch(start + batchSize);
+      });
     }
 
-    var batch = db.batch();
-    slice.forEach(function(p) {
-      var ref = db.collection('products').doc();
-      batch.set(ref, {
-        name: p.name,
-        category: p.category,
-        price: p.price,
-        comparePrice: p.comparePrice || 0,
-        description: p.description || '',
-        images: p.images || [],
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    });
-
-    batch.commit().then(function() {
-      imported += slice.length;
-      bar.value = (imported / total) * 100;
-      text.textContent = imported + ' / ' + total + ' products imported...';
-      importBatch(start + batchSize);
-    }).catch(function(err) {
-      errors.push('Batch ' + (start / batchSize + 1) + ': ' + err.message);
-      imported += slice.length;
-      importBatch(start + batchSize);
-    });
+    importBatch(0);
   }
 
-  importBatch(0);
+  if (updateMode) {
+    db.collection('products').get().then(function(snapshot) {
+      var nameMap = {};
+      snapshot.docs.forEach(function(d) {
+        var data = d.data();
+        if (data.name) nameMap[data.name.toLowerCase().trim()] = d.id;
+      });
+      runImport(nameMap);
+    });
+  } else {
+    runImport(null);
+  }
 });

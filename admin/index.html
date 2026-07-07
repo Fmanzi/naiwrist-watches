@@ -83,19 +83,38 @@
 
     .modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); z-index: 1000;
+      background: rgba(0,0,0,0.4); z-index: 1000;
+      backdrop-filter: blur(2px);
     }
     .modal-overlay.active { display: flex; align-items: center; justify-content: center; }
     .modal-content {
-      background: #fff; border-radius: 12px; padding: 32px; width: 90%; max-width: 600px;
-      max-height: 90vh; overflow-y: auto;
+      background: #fff; border-radius: 12px; padding: 28px 32px 32px; width: 90%; max-width: 600px;
+      max-height: 90vh; overflow-y: auto; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      animation: modalFadeIn 0.2s ease-out;
     }
-    .modal-content h2 { margin: 0 0 24px; }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-content h2 {
+      margin: 0 0 24px; font-size: 20px; padding-right: 36px;
+    }
+    .modal-close-btn {
+      position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
+      border: none; background: #f0f0f0; border-radius: 50%; cursor: pointer;
+      font-size: 18px; display: flex; align-items: center; justify-content: center;
+      color: #666; transition: background 0.15s; line-height: 1;
+    }
+    .modal-close-btn:hover { background: #ddd; color: #333; }
     .modal-content .form-group { margin-bottom: 16px; }
     .modal-content label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px; }
     .modal-content input, .modal-content textarea, .modal-content select {
       width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px;
-      font-size: 14px; font-family: inherit;
+      font-size: 14px; font-family: inherit; transition: border-color 0.15s;
+    }
+    .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus {
+      outline: none; border-color: #1a73e8; box-shadow: 0 0 0 3px rgba(26,115,232,0.1);
     }
     .modal-content textarea { min-height: 80px; resize: vertical; }
     .modal-content .form-row { display: flex; gap: 16px; }
@@ -189,6 +208,7 @@
 
   <div class="modal-overlay" id="productModal">
     <div class="modal-content">
+      <button class="modal-close-btn" data-modal-close="productModal" title="Close">&times;</button>
       <h2 id="modalTitle">Add Product</h2>
       <input type="hidden" id="editProductId">
       <div class="form-row">
@@ -236,6 +256,7 @@
 
   <div class="modal-overlay" id="configModal">
     <div class="modal-content">
+      <button class="modal-close-btn" data-modal-close="configModal" title="Close">&times;</button>
       <h2>Store Settings</h2>
       <div class="form-group">
         <label>Store Name</label>
@@ -270,6 +291,7 @@
 
   <div class="modal-overlay" id="bulkImportModal">
     <div class="modal-content" style="max-width:700px;">
+      <button class="modal-close-btn" data-modal-close="bulkImportModal" title="Close">&times;</button>
       <h2>Bulk Import Products</h2>
       <p style="margin-bottom:16px;color:#666;font-size:14px;">
         Upload a <strong>CSV</strong> or <strong>JSON</strong> file to add products in bulk.

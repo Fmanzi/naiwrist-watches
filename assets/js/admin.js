@@ -41,6 +41,27 @@ document.getElementById('logoutBtn').addEventListener('click', function() {
 
 document.getElementById('searchInput').addEventListener('input', loadDashboard);
 
+document.addEventListener('click', function(e) {
+  var closeBtn = e.target.closest('[data-modal-close]');
+  if (closeBtn) {
+    var modalId = closeBtn.dataset.modalClose;
+    document.getElementById(modalId).classList.remove('active');
+    return;
+  }
+  var overlay = e.target.closest('.modal-overlay.active');
+  if (overlay && e.target === overlay) {
+    overlay.classList.remove('active');
+  }
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(function(m) {
+      m.classList.remove('active');
+    });
+  }
+});
+
 function loadDashboard() {
   var q = document.getElementById('searchInput').value.trim().toLowerCase();
   if (unsubscribeProducts) unsubscribeProducts();

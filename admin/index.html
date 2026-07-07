@@ -168,6 +168,7 @@
       <div style="display:flex; gap:8px;">
         <button class="btn btn-secondary" id="configBtn">Store Settings</button>
         <button class="btn btn-primary" id="addProductBtn">+ Add Product</button>
+        <button class="btn btn-success" id="bulkImportBtn">📦 Bulk Import</button>
         <button class="btn btn-secondary btn-sm" id="seedBtn">Seed Data</button>
       </div>
     </div>
@@ -263,6 +264,61 @@
       <div class="modal-actions">
         <button class="btn btn-secondary" id="configCancelBtn">Cancel</button>
         <button class="btn btn-primary" id="configSaveBtn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="bulkImportModal">
+    <div class="modal-content" style="max-width:700px;">
+      <h2>Bulk Import Products</h2>
+      <p style="margin-bottom:16px;color:#666;font-size:14px;">
+        Upload a <strong>CSV</strong> or <strong>JSON</strong> file to add products in bulk.
+      </p>
+
+      <div style="display:flex;gap:12px;margin-bottom:16px;">
+        <label style="flex:1;padding:16px;border:2px solid #ddd;border-radius:8px;text-align:center;cursor:pointer;" id="csvTab">
+          <strong>CSV</strong>
+          <p style="font-size:12px;color:#999;margin:4px 0 0;">Edit in Excel/Sheets</p>
+        </label>
+        <label style="flex:1;padding:16px;border:2px solid #ddd;border-radius:8px;text-align:center;cursor:pointer;" id="jsonTab">
+          <strong>JSON</strong>
+          <p style="font-size:12px;color:#999;margin:4px 0 0;">Programmatic import</p>
+        </label>
+      </div>
+
+      <div id="csvSection">
+        <div class="form-group">
+          <label>CSV columns: <code>name, category, price, comparePrice, description, images</code></label>
+          <div style="font-size:12px;color:#666;margin-bottom:8px;background:#f5f5f5;padding:10px;border-radius:4px;white-space:pre;overflow-x:auto;">
+name,category,price,comparePrice,description,images
+My Watch,Curren,3500,4500,"Great watch, stainless steel",https://res.cloudinary.com/.../img1.webp|https://res.cloudinary.com/.../img2.webp
+Another Watch,Forsining,7000,,"Automatic movement",https://res.cloudinary.com/.../img3.webp</div>
+          <input type="file" id="csvFileInput" accept=".csv" style="margin-top:4px;">
+        </div>
+      </div>
+
+      <div id="jsonSection" style="display:none;">
+        <div class="form-group">
+          <label>JSON array format:</label>
+          <div style="font-size:12px;color:#666;margin-bottom:8px;background:#f5f5f5;padding:10px;border-radius:4px;white-space:pre;overflow-x:auto;">
+[{ "name": "My Watch", "category": "Curren", "price": 3500, "comparePrice": 4500, "description": "...", "images": ["url1", "url2"] }]</div>
+          <input type="file" id="jsonFileInput" accept=".json" style="margin-top:4px;">
+        </div>
+      </div>
+
+      <div id="importPreview" style="display:none;margin-bottom:16px;">
+        <p style="font-weight:500;margin-bottom:8px;">Preview: <span id="previewCount">0</span> products found</p>
+        <div style="max-height:200px;overflow-y:auto;background:#f9f9f9;border-radius:4px;padding:8px;font-size:13px;" id="previewList"></div>
+      </div>
+
+      <div id="importProgress" style="display:none;margin-bottom:16px;">
+        <progress id="importProgressBar" style="width:100%;height:8px;" value="0" max="100"></progress>
+        <p style="font-size:13px;color:#666;margin-top:4px;" id="importProgressText">0 / 0 products imported...</p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="bulkCancelBtn">Cancel</button>
+        <button class="btn btn-success" id="bulkImportBtnAction" disabled>Import Products</button>
       </div>
     </div>
   </div>

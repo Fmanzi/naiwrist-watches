@@ -309,3 +309,206 @@ document.getElementById('seedBtn').addEventListener('click', function() {
     alert('Error: ' + err.message);
   });
 });
+
+var importMode = 'csv';
+var parsedProducts = [];
+
+document.getElementById('bulkImportBtn').addEventListener('click', function() {
+  parsedProducts = [];
+  importMode = 'csv';
+  document.getElementById('csvSection').style.display = 'block';
+  document.getElementById('jsonSection').style.display = 'none';
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('importProgress').style.display = 'none';
+  document.getElementById('bulkImportBtnAction').disabled = true;
+  document.getElementById('csvFileInput').value = '';
+  document.getElementById('jsonFileInput').value = '';
+  document.getElementById('csvTab').style.borderColor = '#1a73e8';
+  document.getElementById('jsonTab').style.borderColor = '#ddd';
+  document.getElementById('bulkImportModal').classList.add('active');
+});
+
+document.getElementById('csvTab').addEventListener('click', function() {
+  importMode = 'csv';
+  document.getElementById('csvSection').style.display = 'block';
+  document.getElementById('jsonSection').style.display = 'none';
+  document.getElementById('csvTab').style.borderColor = '#1a73e8';
+  document.getElementById('jsonTab').style.borderColor = '#ddd';
+  document.getElementById('csvFileInput').value = '';
+  document.getElementById('jsonFileInput').value = '';
+  parsedProducts = [];
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('bulkImportBtnAction').disabled = true;
+});
+
+document.getElementById('jsonTab').addEventListener('click', function() {
+  importMode = 'json';
+  document.getElementById('csvSection').style.display = 'none';
+  document.getElementById('jsonSection').style.display = 'block';
+  document.getElementById('csvTab').style.borderColor = '#ddd';
+  document.getElementById('jsonTab').style.borderColor = '#1a73e8';
+  document.getElementById('csvFileInput').value = '';
+  document.getElementById('jsonFileInput').value = '';
+  parsedProducts = [];
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('bulkImportBtnAction').disabled = true;
+});
+
+document.getElementById('csvFileInput').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var text = ev.target.result;
+    var lines = text.split('\n').filter(function(l) { return l.trim(); });
+    if (lines.length < 2) { alert('CSV must have a header row and at least one product.'); return; }
+
+    var headers = parseCSVLine(lines[0]);
+    var required = ['name', 'category', 'price'];
+    var missing = required.filter(function(r) { return headers.indexOf(r) === -1; });
+    if (missing.length) { alert('Missing required columns: ' + missing.join(', ')); return; }
+
+    parsedProducts = [];
+    for (var i = 1; i < lines.length; i++) {
+      var vals = parseCSVLine(lines[i]);
+      var product = {};
+      headers.forEach(function(h, idx) { product[h.trim().toLowerCase()] = (vals[idx] || '').trim(); });
+      if (!product.name) continue;
+      product.price = parseFloat(product.price) || 0;
+      product.comparePrice = parseFloat(product.comparePrice) || 0;
+      if (product.images) {
+        product.images = product.images.split('|').map(function(u) { return u.trim(); }).filter(function(u) { return u; });
+      } else {
+        product.images = [];
+      }
+      parsedProducts.push(product);
+    }
+    showPreview();
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById('jsonFileInput').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) { alert('JSON must be an array of products.'); return; }
+      parsedProducts = data.map(function(p) {
+        return {
+          name: (p.name || '').trim(),
+          category: (p.category || '').trim(),
+          price: parseFloat(p.price) || 0,
+          comparePrice: parseFloat(p.comparePrice) || 0,
+          description: (p.description || '').trim(),
+          images: Array.isArray(p.images) ? p.images : []
+        };
+      }).filter(function(p) { return p.name; });
+      if (!parsedProducts.length) { alert('No valid products found.'); return; }
+      showPreview();
+    } catch(e) {
+      alert('Invalid JSON: ' + e.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+function parseCSVLine(line) {
+  var result = [];
+  var current = '';
+  var inQuotes = false;
+  for (var i = 0; i < line.length; i++) {
+    var ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') { current += '"'; i++; }
+      else { inQuotes = !inQuotes; }
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function showPreview() {
+  document.getElementById('previewCount').textContent = parsedProducts.length;
+  var list = document.getElementById('previewList');
+  list.innerHTML = parsedProducts.map(function(p, i) {
+    return '<div style="padding:4px 0;border-bottom:1px solid #eee;">' +
+      '<strong>#' + (i + 1) + '</strong> ' + escapeHtml(p.name) +
+      ' — <em>' + escapeHtml(p.category) + '</em> — Ksh ' + (p.price || 0).toLocaleString() +
+      (p.images.length ? ' — <span style="color:#2e7d32;">' + p.images.length + ' images</span>' : '') +
+    '</div>';
+  }).join('');
+  document.getElementById('importPreview').style.display = 'block';
+  document.getElementById('bulkImportBtnAction').disabled = false;
+}
+
+document.getElementById('bulkCancelBtn').addEventListener('click', function() {
+  document.getElementById('bulkImportModal').classList.remove('active');
+  parsedProducts = [];
+});
+
+document.getElementById('bulkImportBtnAction').addEventListener('click', function() {
+  if (!parsedProducts.length) { alert('No products to import.'); return; }
+  if (!confirm('Import ' + parsedProducts.length + ' products into Firestore?')) return;
+
+  var btn = document.getElementById('bulkImportBtnAction');
+  btn.disabled = true;
+  btn.textContent = 'Importing...';
+  document.getElementById('importProgress').style.display = 'block';
+
+  var total = parsedProducts.length;
+  var imported = 0;
+  var bar = document.getElementById('importProgressBar');
+  var text = document.getElementById('importProgressText');
+  var errors = [];
+
+  function importBatch(start) {
+    var batchSize = 20;
+    var slice = parsedProducts.slice(start, start + batchSize);
+    if (!slice.length) {
+      btn.textContent = 'Import Products';
+      btn.disabled = false;
+      var msg = 'Successfully imported ' + imported + ' of ' + total + ' products.';
+      if (errors.length) msg += ' Errors: ' + errors.join('; ');
+      alert(msg);
+      document.getElementById('bulkImportModal').classList.remove('active');
+      parsedProducts = [];
+      return;
+    }
+
+    var batch = db.batch();
+    slice.forEach(function(p) {
+      var ref = db.collection('products').doc();
+      batch.set(ref, {
+        name: p.name,
+        category: p.category,
+        price: p.price,
+        comparePrice: p.comparePrice || 0,
+        description: p.description || '',
+        images: p.images || [],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    });
+
+    batch.commit().then(function() {
+      imported += slice.length;
+      bar.value = (imported / total) * 100;
+      text.textContent = imported + ' / ' + total + ' products imported...';
+      importBatch(start + batchSize);
+    }).catch(function(err) {
+      errors.push('Batch ' + (start / batchSize + 1) + ': ' + err.message);
+      imported += slice.length;
+      importBatch(start + batchSize);
+    });
+  }
+
+  importBatch(0);
+});
